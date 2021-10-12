@@ -1,79 +1,128 @@
+function isDefaultDataValid() {
+	const operationData = JSON.parse(localStorage.getItem('operationData'));
+	if (operationData !== null && typeof operationData === 'object' && operationData.length > 0)
+		return operationData;
+	else
+		return [
+			{
+				operator: 'credit',
+				titre: 'Réalisation de site web',
+				desc: 'ma mairie',
+				montant: 1800,
+			},
+			{
+				operator: 'debit',
+				titre: 'Restaurant',
+				desc: 'mc do',
+				montant: 15,
+			},
+			{
+				operator: 'credit',
+				titre: 'Vente Boncoin',
+				desc: 'jeu PS5',
+				montant: 25,
+			},
+			{
+				operator: 'debit',
+				titre: 'Loyer',
+				desc: "mois d'août",
+				montant: 450,
+			},
+			{
+				operator: 'credit',
+				titre: 'Salaire',
+				desc: 'mois de septembre',
+				montant: 1200,
+			},
+		];
+}
+const operationData = isDefaultDataValid();
+
 const form = document.getElementById('operationForm');
-const operationBlock = document.querySelector('.grid-container');
+const operationBlock = document.querySelector('main div.grid-container');
 
-function createNewOperation({ operator, titre, desc, montant }) {
-    console.log(operator, titre, desc, montant);
-	// const container = document.createElement('div');
-	// container.setAttribute('class', 'operation credit');
+function createNewOperation({ operator, titre, desc, montant }, addItToLocalStorage) {
+	const img =
+		operator === 'credit' ? './assets/images/sac-dargent.png' : './assets/images/depenses.png';
 
-	// const gridData = document.createElement('div');
-	// gridData.setAttribute('class', 'grid-x grid-padding-x align-middle');
+	const container = document.createElement('div');
+	container.setAttribute('class', `operation ${operator}`);
 
-	// /* ---------- First column ---------- */
-	// const firstCol = document.createElement('div');
-	// firstCol.setAttribute('class', 'cell shrink');
+	const gridData = document.createElement('div');
+	gridData.setAttribute('class', 'grid-x grid-padding-x align-middle');
 
-	// const firstColPicto = document.createElement('div');
-	// firstColPicto.setAttribute('class', 'picto');
+	/* ---------- First column ---------- */
+	const firstCol = document.createElement('div');
+	firstCol.setAttribute('class', 'cell shrink');
 
-	// const firstColPictoImg = document.createElement('img');
-	// firstColPictoImg.setAttribute('src', params);
-	// firstColPictoImg.setAttribute('alt', params);
+	const firstColPicto = document.createElement('div');
+	firstColPicto.setAttribute('class', 'picto');
 
-	// firstColPicto.appendChild(firstColPictoImg);
+	const firstColPictoImg = document.createElement('img');
+	firstColPictoImg.setAttribute('src', img);
+	firstColPictoImg.setAttribute('alt', operator);
 
-	// firstCol.appendChild(firstColPicto);
-	// gridData.appendChild(firstCol);
+	firstColPicto.appendChild(firstColPictoImg);
 
-	// /* ---------- Second column ---------- */
-	// const secondCol = document.createElement('div');
-	// secondCol.setAttribute('class', 'cell auto');
+	firstCol.appendChild(firstColPicto);
+	gridData.appendChild(firstCol);
 
-	// const secondColBlock = document.createElement('div');
+	/* ---------- Second column ---------- */
+	const secondCol = document.createElement('div');
+	secondCol.setAttribute('class', 'cell auto');
 
-	// // Create h2 element & insert it
-	// const secondColTitle = document.createElement('h2');
-	// const secondColTitleText = document.createTextNode(params);
-	// secondColTitle.appendChild(secondColTitleText);
-	// secondColBlock.appendChild(secondColTitle);
+	const secondColBlock = document.createElement('div');
 
-	// // Create small element & insert it
-	// const secondColDesc = document.createElement('small');
-	// const secondColDescText = document.createTextNode(params);
-	// secondColDesc.appendChild(secondColDescText);
-	// secondColBlock.appendChild(secondColDesc);
+	// Create h2 element & insert it
+	const secondColTitle = document.createElement('h2');
+	const secondColTitleText = document.createTextNode(titre);
+	secondColTitle.appendChild(secondColTitleText);
+	secondColBlock.appendChild(secondColTitle);
 
-	// secondCol.appendChild(secondColBlock);
-	// gridData.appendChild(secondCol);
+	// Create small element & insert it
+	const secondColDesc = document.createElement('small');
+	const secondColDescText = document.createTextNode(desc);
+	secondColDesc.appendChild(secondColDescText);
+	secondColBlock.appendChild(secondColDesc);
 
-	// /* ---------- Third column ---------- */
-	// const thirdCol = document.createElement('div');
-	// thirdCol.setAttribute('class', 'cell small-3 text-right');
+	secondCol.appendChild(secondColBlock);
+	gridData.appendChild(secondCol);
 
-	// const thirdColBlock = document.createElement('div');
+	/* ---------- Third column ---------- */
+	const thirdCol = document.createElement('div');
+	thirdCol.setAttribute('class', 'cell small-3 text-right');
 
-	// // Create p element & insert it
-	// const thirdColParagraph = document.createElement('p');
-	// thirdColParagraph.setAttribute('class', 'count');
-	// const thirdColParagraphText = document.createTextNode(params + ' €');
-	// thirdColParagraph.appendChild(thirdColParagraphText);
-	// thirdColBlock.appendChild(thirdColParagraph);
+	const thirdColBlock = document.createElement('div');
 
-	// // Create small element & insert it
-	// const thirdColPercentage = document.createElement('small');
-	// const thirdColPercentageText = document.createTextNode(params + ' %');
-	// thirdColPercentage.appendChild(thirdColPercentageText);
-	// thirdColBlock.appendChild(thirdColPercentage);
+	// Create p element & insert it
+	const thirdColParagraph = document.createElement('p');
+	thirdColParagraph.setAttribute('class', 'count');
+	const thirdColParagraphText = document.createTextNode(montant + ' €');
+	thirdColParagraph.appendChild(thirdColParagraphText);
+	thirdColBlock.appendChild(thirdColParagraph);
 
-	// thirdCol.appendChild(thirdColBlock);
-	// gridData.appendChild(thirdCol);
+	// Create small element & insert it
+	const thirdColPercentage = document.createElement('small');
+	const thirdColPercentageText = document.createTextNode('changeit' + ' %');
+	thirdColPercentage.appendChild(thirdColPercentageText);
+	thirdColBlock.appendChild(thirdColPercentage);
+
+	thirdCol.appendChild(thirdColBlock);
+	gridData.appendChild(thirdCol);
+
+	/* ---------- Insert operation in container ---------- */
+	container.appendChild(gridData);
+	operationBlock.prepend(container);
+
+	/* ---------- Update operationData localStorage ---------- */
+	if (addItToLocalStorage) operationData.push({ operator, titre, desc, montant });
+	localStorage.setItem('operationData', JSON.stringify(operationData));
 }
 
 form.addEventListener('submit', (e) => {
 	e.preventDefault();
 
 	const formData = new FormData(form);
-	console.log(formData);
 
 	const dataToInsert = {};
 
@@ -82,10 +131,22 @@ form.addEventListener('submit', (e) => {
 		dataToInsert[key] = value;
 	});
 
-	createNewOperation(dataToInsert);
+	createNewOperation(dataToInsert, true);
 
-	// window.location = './';
+	// Use to reset form when submited
+	form.reset();
 });
+
+function init() {
+	if (operationData.length > 0) {
+		operationData.forEach((value, key) => {
+			createNewOperation(operationData[key], false);
+		});
+	}
+}
+
+init();
+
 /**
  * init foundation
  */
