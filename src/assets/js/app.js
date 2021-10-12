@@ -42,6 +42,8 @@ const form = document.getElementById('operationForm');
 const operationBlock = document.querySelector('main div.grid-container');
 
 function createNewOperation({ operator, titre, desc, montant }, addItToLocalStorage) {
+	addItToLocalStorage = addItToLocalStorage || false;
+
 	const img =
 		operator === 'credit' ? './assets/images/sac-dargent.png' : './assets/images/depenses.png';
 
@@ -119,11 +121,50 @@ function createNewOperation({ operator, titre, desc, montant }, addItToLocalStor
 	localStorage.setItem('operationData', JSON.stringify(operationData));
 }
 
+'hashchange DOMContentLoaded'.split(' ').forEach((listener) => {
+	window.addEventListener(listener, () => {
+		const categorySwitch = (operator) => {
+			let link = document.querySelector(`[href="#${operator}"]`);
+			if (link.classList.value === '') {
+				document.querySelectorAll('a.active').forEach((item) => {
+					item.classList.remove('active');
+				});
+				link.classList.add('active');
+			}
+			operationBlock.innerHTML = '';
+
+			if (operator !== '') {
+				operationData.forEach((value, key) => {
+					if (operationData[key].operator === operator)
+						createNewOperation(operationData[key]);
+				});
+			}
+		};
+
+		switch (window.location.hash) {
+			case '':
+				categorySwitch('');
+				init();
+				break;
+
+			case '#credit':
+				categorySwitch('credit');
+				break;
+
+			case '#debit':
+				categorySwitch('debit');
+
+				break;
+
+			default:
+				break;
+		}
+	});
+});
+
 form.addEventListener('submit', (e) => {
 	e.preventDefault();
-
 	const formData = new FormData(form);
-
 	const dataToInsert = {};
 
 	formData.forEach((value, key) => {
@@ -140,7 +181,7 @@ form.addEventListener('submit', (e) => {
 function init() {
 	if (operationData.length > 0) {
 		operationData.forEach((value, key) => {
-			createNewOperation(operationData[key], false);
+			createNewOperation(operationData[key]);
 		});
 	}
 }
