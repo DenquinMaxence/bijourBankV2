@@ -41,6 +41,12 @@ const operationData = isDefaultDataValid();
 const form = document.getElementById('operationForm');
 const operationBlock = document.querySelector('main div.grid-container');
 
+// Create a new operation, 
+/**
+ * 
+ * @param {Object} param0 
+ * @param {Boolean} addItToLocalStorage 
+ */
 function createNewOperation({ operator, titre, desc, montant }, addItToLocalStorage) {
 	addItToLocalStorage = addItToLocalStorage || false;
 
