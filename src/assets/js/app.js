@@ -41,6 +41,38 @@ const operationData = isDefaultDataValid();
 const form = document.getElementById('operationForm');
 const operationBlock = document.querySelector('main div.grid-container');
 
+/**
+ * Allows you to calculate the total amount of the balance and then display it with a status
+ * 
+ * @return void
+ */
+function calculSold() {
+	const soldText = document.getElementById('solde');
+	const soldStatus = document.getElementById('status');
+
+	let creditTotal = 0;
+	let debitTotal = 0;
+	operationData.forEach((item) => {
+		item.operator === 'credit'
+			? (creditTotal = creditTotal + item.montant)
+			: (debitTotal = debitTotal + item.montant);
+	});
+
+	const soldTotal = creditTotal - debitTotal;
+
+	soldText.innerHTML = soldTotal.toLocaleString('fr') + '.00€';
+
+	soldTotal > 0
+		? ((soldStatus.classList = 'good'), (soldStatus.innerHTML = 'On est bien 😃'))
+		: ((soldStatus.classList = 'bad'), (soldStatus.innerHTML = "C'est la merde 🔥"));
+}
+
+/**
+ * Text
+ * 
+ * @param {Object} Object a
+ * @param {Boolean} addItToLocalStorage a
+ */
 function createNewOperation({ operator, titre, desc, montant }, addItToLocalStorage) {
 	addItToLocalStorage = addItToLocalStorage || false;
 
@@ -119,6 +151,8 @@ function createNewOperation({ operator, titre, desc, montant }, addItToLocalStor
 	/* ---------- Update operationData localStorage ---------- */
 	if (addItToLocalStorage) operationData.push({ operator, titre, desc, montant });
 	localStorage.setItem('operationData', JSON.stringify(operationData));
+
+	calculSold();
 }
 
 'hashchange DOMContentLoaded'.split(' ').forEach((listener) => {
