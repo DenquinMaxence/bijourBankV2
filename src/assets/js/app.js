@@ -43,7 +43,7 @@ const operationBlock = document.querySelector('main div.grid-container');
 
 /**
  * Allows you to calculate the total amount of the balance and then display it with a status
- * 
+ *
  * @return void
  */
 function calculSold() {
@@ -69,7 +69,7 @@ function calculSold() {
 
 /**
  * Text
- * 
+ *
  * @param {Object} Object a
  * @param {Boolean} addItToLocalStorage a
  */
