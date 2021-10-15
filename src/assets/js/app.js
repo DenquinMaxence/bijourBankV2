@@ -1,7 +1,11 @@
 function isDefaultDataValid() {
-	const operationData = JSON.parse(localStorage.getItem('operationData'));
-	if (operationData !== null && typeof operationData === 'object' && operationData.length > 0)
-		return operationData;
+	const localOperationData = JSON.parse(localStorage.getItem('operationData'));
+	if (
+		localOperationData !== null &&
+		typeof localOperationData === 'object' &&
+		localOperationData.length > 0
+	)
+		return localOperationData;
 	else
 		return [
 			{
@@ -56,6 +60,8 @@ function calculSold() {
 		item.operator === 'credit'
 			? (creditTotal = creditTotal + item.montant)
 			: (debitTotal = debitTotal + item.montant);
+
+		// console.log(item.operator, parseInt(((item.montant / debitTotal) * 100).toFixed(2)));
 	});
 
 	const soldTotal = creditTotal - debitTotal;
@@ -196,8 +202,10 @@ function createNewOperation({ operator, titre, desc, montant }, addItToLocalStor
 	});
 });
 
+// console.log(document.querySelector('#operationForm button[type=submit]').setAttribute('data-close', ''));
 form.addEventListener('submit', (e) => {
 	e.preventDefault();
+
 	const formData = new FormData(form);
 	const dataToInsert = {};
 

@@ -1,9 +1,23 @@
 // <block:setup:1>
-const datapoints = [1200, 750, 775, 760, 2560];
+const operationsObject = JSON.parse(localStorage.getItem('operationData')) || [];
+const datapoints = [];
+if (operationsObject.length > 0) {
+	operationsObject.forEach((item, key) => {
+		console.log(item, key);
+		if (datapoints.length > 0) {
+			datapoints[key] =
+				item.operator === 'credit'
+					? datapoints[key - 1] + item.montant
+					: datapoints[key - 1] - item.montant;
+		} else {
+			datapoints[key] = item.operator === 'debit' ? -item.montant : item.montant;
+		}
+	});
+}
 const DATA_COUNT = datapoints.length + 2;
 const labels = [];
 for (let i = 0; i < DATA_COUNT; ++i) {
-	labels.push(i.toString());
+	labels.push(operationsObject[i] !== undefined ? operationsObject[i].titre : i.toString());
 }
 const data = {
 	labels: labels,
