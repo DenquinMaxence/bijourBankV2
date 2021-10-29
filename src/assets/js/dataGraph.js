@@ -3,7 +3,6 @@ const operationsObject = JSON.parse(localStorage.getItem('operationData')) || []
 const datapoints = [];
 if (operationsObject.length > 0) {
 	operationsObject.forEach((item, key) => {
-		console.log(item, key);
 		if (datapoints.length > 0) {
 			datapoints[key] =
 				item.operator === 'credit'

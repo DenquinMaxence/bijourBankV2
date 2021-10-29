@@ -60,8 +60,6 @@ function calculSold() {
 		item.operator === 'credit'
 			? (creditTotal = creditTotal + item.montant)
 			: (debitTotal = debitTotal + item.montant);
-
-		// console.log(item.operator, parseInt(((item.montant / debitTotal) * 100).toFixed(2)));
 	});
 
 	const soldTotal = creditTotal - debitTotal;
@@ -74,10 +72,10 @@ function calculSold() {
 }
 
 /**
- * Text
+ * Display new operation & store it in localStorage
  *
- * @param {Object} Object a
- * @param {Boolean} addItToLocalStorage a
+ * @param {Object} Object Operation object
+ * @param {Boolean} addItToLocalStorage Boolean param to define if we add it in localStorage
  */
 function createNewOperation({ operator, titre, desc, montant }, addItToLocalStorage) {
 	addItToLocalStorage = addItToLocalStorage || false;
@@ -85,74 +83,106 @@ function createNewOperation({ operator, titre, desc, montant }, addItToLocalStor
 	const img =
 		operator === 'credit' ? './assets/images/sac-dargent.png' : './assets/images/depenses.png';
 
-	const container = document.createElement('div');
-	container.setAttribute('class', `operation ${operator}`);
+	// _________________________________________________________________________________________________
+	/* First possibility to insert a new operation */
 
-	const gridData = document.createElement('div');
-	gridData.setAttribute('class', 'grid-x grid-padding-x align-middle');
+	// const container = document.createElement('div');
+	// container.setAttribute('class', `operation ${operator}`);
 
-	/* ---------- First column ---------- */
-	const firstCol = document.createElement('div');
-	firstCol.setAttribute('class', 'cell shrink');
+	// const gridData = document.createElement('div');
+	// gridData.setAttribute('class', 'grid-x grid-padding-x align-middle');
 
-	const firstColPicto = document.createElement('div');
-	firstColPicto.setAttribute('class', 'picto');
+	// /* ---------- First column ---------- */
+	// const firstCol = document.createElement('div');
+	// firstCol.setAttribute('class', 'cell shrink');
 
-	const firstColPictoImg = document.createElement('img');
-	firstColPictoImg.setAttribute('src', img);
-	firstColPictoImg.setAttribute('alt', operator);
+	// const firstColPicto = document.createElement('div');
+	// firstColPicto.setAttribute('class', 'picto');
 
-	firstColPicto.appendChild(firstColPictoImg);
+	// const firstColPictoImg = document.createElement('img');
+	// firstColPictoImg.setAttribute('src', img);
+	// firstColPictoImg.setAttribute('alt', operator);
 
-	firstCol.appendChild(firstColPicto);
-	gridData.appendChild(firstCol);
+	// firstColPicto.appendChild(firstColPictoImg);
 
-	/* ---------- Second column ---------- */
-	const secondCol = document.createElement('div');
-	secondCol.setAttribute('class', 'cell auto');
+	// firstCol.appendChild(firstColPicto);
+	// gridData.appendChild(firstCol);
 
-	const secondColBlock = document.createElement('div');
+	// /* ---------- Second column ---------- */
+	// const secondCol = document.createElement('div');
+	// secondCol.setAttribute('class', 'cell auto');
 
-	// Create h2 element & insert it
-	const secondColTitle = document.createElement('h2');
-	const secondColTitleText = document.createTextNode(titre);
-	secondColTitle.appendChild(secondColTitleText);
-	secondColBlock.appendChild(secondColTitle);
+	// const secondColBlock = document.createElement('div');
 
-	// Create small element & insert it
-	const secondColDesc = document.createElement('small');
-	const secondColDescText = document.createTextNode(desc);
-	secondColDesc.appendChild(secondColDescText);
-	secondColBlock.appendChild(secondColDesc);
+	// // Create h2 element & insert it
+	// const secondColTitle = document.createElement('h2');
+	// const secondColTitleText = document.createTextNode(titre);
+	// secondColTitle.appendChild(secondColTitleText);
+	// secondColBlock.appendChild(secondColTitle);
 
-	secondCol.appendChild(secondColBlock);
-	gridData.appendChild(secondCol);
+	// // Create small element & insert it
+	// const secondColDesc = document.createElement('small');
+	// const secondColDescText = document.createTextNode(desc);
+	// secondColDesc.appendChild(secondColDescText);
+	// secondColBlock.appendChild(secondColDesc);
 
-	/* ---------- Third column ---------- */
-	const thirdCol = document.createElement('div');
-	thirdCol.setAttribute('class', 'cell small-3 text-right');
+	// secondCol.appendChild(secondColBlock);
+	// gridData.appendChild(secondCol);
 
-	const thirdColBlock = document.createElement('div');
+	// /* ---------- Third column ---------- */
+	// const thirdCol = document.createElement('div');
+	// thirdCol.setAttribute('class', 'cell small-3 text-right');
 
-	// Create p element & insert it
-	const thirdColParagraph = document.createElement('p');
-	thirdColParagraph.setAttribute('class', 'count');
-	const thirdColParagraphText = document.createTextNode(montant + ' €');
-	thirdColParagraph.appendChild(thirdColParagraphText);
-	thirdColBlock.appendChild(thirdColParagraph);
+	// const thirdColBlock = document.createElement('div');
 
-	// Create small element & insert it
-	const thirdColPercentage = document.createElement('small');
-	const thirdColPercentageText = document.createTextNode('changeit' + ' %');
-	thirdColPercentage.appendChild(thirdColPercentageText);
-	thirdColBlock.appendChild(thirdColPercentage);
+	// // Create p element & insert it
+	// const thirdColParagraph = document.createElement('p');
+	// thirdColParagraph.setAttribute('class', 'count');
+	// const thirdColParagraphText = document.createTextNode(montant + ' €');
+	// thirdColParagraph.appendChild(thirdColParagraphText);
+	// thirdColBlock.appendChild(thirdColParagraph);
 
-	thirdCol.appendChild(thirdColBlock);
-	gridData.appendChild(thirdCol);
+	// // Create small element & insert it
+	// const thirdColPercentage = document.createElement('small');
+	// const thirdColPercentageText = document.createTextNode('changeit' + ' %');
+	// thirdColPercentage.appendChild(thirdColPercentageText);
+	// thirdColBlock.appendChild(thirdColPercentage);
 
-	/* ---------- Insert operation in container ---------- */
-	container.appendChild(gridData);
-	operationBlock.prepend(container);
+	// thirdCol.appendChild(thirdColBlock);
+	// gridData.appendChild(thirdCol);
+
+	// /* ---------- Insert operation in container ---------- */
+	// container.appendChild(gridData);
+	// operationBlock.prepend(container);
+
+	// _________________________________________________________________________________________________
+	/* Second possibility to insert a new operation */
+
+	const html = `
+		<div class="operation ${operator}">
+			<div class="grid-x grid-padding-x align-middle">
+				<div class="cell shrink">
+					<div class="picto">
+						<img src="${img}" alt="${operator}" />
+					</div>
+				</div>
+				<div class="cell auto">
+					<div>
+						<h2>${titre}</h2>
+						<small>${desc}</small>
+					</div>
+				</div>
+				<div class="cell small-3 text-right">
+					<div>
+						<p class="count">${montant} €</p>
+						<small>100%</small>
+					</div>
+				</div>
+			</div>
+		</div>
+  	`;
+
+	operationBlock.insertAdjacentHTML('afterbegin', html);
 
 	/* ---------- Update operationData localStorage ---------- */
 	if (addItToLocalStorage) operationData.push({ operator, titre, desc, montant });
@@ -202,7 +232,6 @@ function createNewOperation({ operator, titre, desc, montant }, addItToLocalStor
 	});
 });
 
-// console.log(document.querySelector('#operationForm button[type=submit]').setAttribute('data-close', ''));
 form.addEventListener('submit', (e) => {
 	e.preventDefault();
 
@@ -218,6 +247,7 @@ form.addEventListener('submit', (e) => {
 
 	// Use to reset form when submited
 	form.reset();
+	location.reload();
 });
 
 function init() {
